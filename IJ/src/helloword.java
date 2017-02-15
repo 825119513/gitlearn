@@ -11,9 +11,10 @@ public class helloword {
     public  static char character[];                            //将用户输入的字符串分解成单个字符
     public static int symbol[];                                 //算式符号集
     public static int flag=0;                                   //标记当前进度，做到第几题了
+    public static int amount_of_questions;
     public static int amount_of_right=0;                        //答题正确的数量
     public static void main(String[] args) {
-        System.out.println("小学生你好");
+        System.out.print("HELLO,PLEASE ENTER THE AMOUNT OF QUESTIONS:");
         number_front=new int[100][2];
         number_behind=new int[100][2];
         answer=new int[100][2];
@@ -21,8 +22,8 @@ public class helloword {
         input_answer=new int[100][2];
         int zui_da_gong_yue_shu;                                    //最大公约数
         Scanner in=new Scanner(System.in);
-
-        for(int i=0;i<10;i++){                                     //随机产生10道四则运算式
+        amount_of_questions=in.nextInt();
+        for(int i=0;i<amount_of_questions;i++){                                     //随机产生N道四则运算式
             number_front[i][1]=1+(int)(Math.random()*100);                      //前面位置的数字的产生及约分
             number_front[i][0]=1+(int)(Math.random()*number_front[i][1]);       //限制随机范围，确保产生的是真分数
             zui_da_gong_yue_shu=yuefen(number_front[i][0],number_front[i][1]);
@@ -38,7 +39,7 @@ public class helloword {
             number_behind[i][1]=number_behind[i][1]/zui_da_gong_yue_shu;
         }
 
-        for(int i=0;i<10;i++){
+        for(int i=0;i<amount_of_questions;i++){
             if(symbol[i]==0){                                   //加法运算
                 answer[i][0]=number_front[i][0]*number_behind[i][1]+number_front[i][1]*number_behind[i][0];
                 answer[i][1]=number_front[i][1]*number_behind[i][1];
@@ -61,7 +62,7 @@ public class helloword {
         }
 
 
-        for(int i=0;i<10;i++) {                                 //打印算式
+        for(int i=0;i<amount_of_questions;i++) {                                 //打印算式
             if(number_front[i][0]%number_front[i][1]!=0)                //判断是否是整数
                 System.out.print(number_front[i][0]+"/"+number_front[i][1]);
             else
@@ -97,11 +98,13 @@ public class helloword {
                 flag++;
         }
         System.out.print("答题完毕！");
-        zui_da_gong_yue_shu=yuefen(amount_of_right,10);
-        if(zui_da_gong_yue_shu==10)
+        zui_da_gong_yue_shu=yuefen(amount_of_right,amount_of_questions);
+        if(zui_da_gong_yue_shu==amount_of_questions&&amount_of_right!=0)
             System.out.println("恭喜全部答对！");
+        else if(amount_of_right==0)
+            System.out.println("全错！你的数学是体育老师教的？");
         else
-            System.out.println("正确"+amount_of_right+"题，"+"正确率为"+amount_of_right/zui_da_gong_yue_shu+"/"+10/zui_da_gong_yue_shu);
+            System.out.println("共"+amount_of_questions+"题，"+"正确"+amount_of_right+"题，"+"正确率为"+amount_of_right/zui_da_gong_yue_shu+"/"+amount_of_questions/zui_da_gong_yue_shu);
     }
 
     public static int yuefen(int fenzi,int fenmu){     //约分函数，通过辗转相除法得到最大公约数并将该数返回
@@ -179,7 +182,8 @@ public class helloword {
                     input_answer[flag][1] += ((character[length - i - 1] - 48) * g);
                     g *= 10;
                 }
-            } else System.out.println("");
+            }
+            else System.out.println("你输错了！");
         }
     }
 }
